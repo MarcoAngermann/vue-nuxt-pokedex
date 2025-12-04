@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-950 p-8">
     <div class="max-w-7xl mx-auto">
-      <h1 class="text-7xl font-bold mb-8 text-center text-gray-500">Pokédex</h1>
+      <h1 class="text-7xl font-bold mb-8 text-center text-gray-700">Pokédex</h1>
       
       <!-- Suchfeld -->
       <div class="mb-8 flex justify-center">

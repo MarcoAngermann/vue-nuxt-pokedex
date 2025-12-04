@@ -26,7 +26,7 @@
         <span 
           v-for="type in pokemon.types" 
           :key="type.type.name"
-          class="text-xs px-2 py-1 rounded text-white capitalize"
+          class="text-xs px-2 py-1 rounded font-bold text-gray-700 capitalize"
           :class="getTypeColor(type.type.name)"
         >
           {{ type.type.name }}

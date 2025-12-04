@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 
 export const usePokemon = () => {
   const pokemon = ref<Array<any>>([])
-  const allPokemon = ref<Array<any>>([])  // ← Alle Pokémon speichern
+  const allPokemon = ref<Array<any>>([])
   const loading = ref(false)
   const error = ref<Error | null>(null)
   const offset = ref(0)
@@ -11,11 +11,10 @@ export const usePokemon = () => {
   const searchQuery = ref('')
   const isSearching = ref(false)
 
-  // Initial alle Pokémon-Namen laden (leicht & schnell)
   const loadAllPokemonNames = async () => {
     try {
       const data = await $fetch<{ results: Array<{ name: string, url: string }>, count: number }>('https://pokeapi.co/api/v2/pokemon', {
-        query: { limit: 10000 }  // Alle auf einmal
+        query: { limit: 10000 } 
       })
       allPokemon.value = data.results
     } catch (err) {
@@ -60,7 +59,7 @@ export const usePokemon = () => {
     isSearching.value = true
     
     try {
-      // Filtere Namen aus allPokemon
+      // Finde Pokémon, deren Namen mit der Suchanfrage beginnen
       const matches = allPokemon.value.filter(p =>
         p.name.toLowerCase().startsWith(query.toLowerCase())
       )
