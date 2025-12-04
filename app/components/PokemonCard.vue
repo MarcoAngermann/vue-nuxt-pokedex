@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="bg-white rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer overflow-hidden border-2"
+    class="bg-gray-800 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer overflow-hidden border-2"
     :class="borderColor"
   >
     <div 
@@ -19,9 +19,9 @@
       />
     </div>
     
-    <div class="p-4 text-center border-t border-gray-100">
-      <p class="capitalize font-bold text-lg text-gray-800">{{ pokemon.name }}</p>
-      <p class="text-xs text-gray-500 mt-1">#{{ pokemon.id }}</p>
+    <div class="p-4 text-center border-t border-gray-700">
+      <p class="capitalize font-bold text-lg text-white">{{ pokemon.name }}</p>
+      <p class="text-xs text-gray-400 mt-1">#{{ pokemon.id }}</p>
       <div class="flex gap-2 justify-center mt-2">
         <span 
           v-for="type in pokemon.types" 
@@ -37,6 +37,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 const typeColors = {
   fire: 'bg-red-500',
   water: 'bg-blue-500',
@@ -66,18 +68,55 @@ const props = defineProps<{
 const primaryType = props.pokemon.types[0].type.name as TypeKey
 
 const headerGradient = computed(() => {
-  const color = typeColors[primaryType] || 'bg-gray-400'
-  return `bg-gradient-to-r from-${color.split('-')[1]}-400 to-${color}`
+  const colorClass = typeColors[primaryType] || 'bg-gray-400'
+  return colorClass
 })
 
 const bgColor = computed(() => {
-  const color = typeColors[primaryType] || 'bg-gray-100'
-  return `bg-gradient-to-br from-${color.split('-')[1]}-50 to-${color.split('-')[1]}-100`
+  const type = primaryType as TypeKey
+  const colorMap: Record<TypeKey, string> = {
+    fire: 'bg-gray-700',
+    water: 'bg-gray-700',
+    grass: 'bg-gray-700',
+    electric: 'bg-gray-700',
+    ice: 'bg-gray-700',
+    fighting: 'bg-gray-700',
+    poison: 'bg-gray-700',
+    ground: 'bg-gray-700',
+    flying: 'bg-gray-700',
+    psychic: 'bg-gray-700',
+    bug: 'bg-gray-700',
+    rock: 'bg-gray-700',
+    ghost: 'bg-gray-700',
+    dragon: 'bg-gray-700',
+    dark: 'bg-gray-700',
+    steel: 'bg-gray-700',
+    fairy: 'bg-gray-700',
+  }
+  return colorMap[type] || 'bg-gray-700'
 })
 
 const borderColor = computed(() => {
-  const color = typeColors[primaryType] || 'border-gray-100'
-  return `border-${color.split('-')[1]}-200`
+  const colorMap: Record<TypeKey, string> = {
+    fire: 'border-red-600',
+    water: 'border-blue-600',
+    grass: 'border-green-600',
+    electric: 'border-yellow-500',
+    ice: 'border-cyan-500',
+    fighting: 'border-red-800',
+    poison: 'border-purple-600',
+    ground: 'border-yellow-800',
+    flying: 'border-blue-500',
+    psychic: 'border-pink-600',
+    bug: 'border-green-700',
+    rock: 'border-gray-700',
+    ghost: 'border-purple-800',
+    dragon: 'border-indigo-700',
+    dark: 'border-gray-900',
+    steel: 'border-gray-600',
+    fairy: 'border-pink-500',
+  }
+  return colorMap[primaryType] || 'border-gray-600'
 })
 
 const getTypeColor = (type: string) => {

@@ -1,31 +1,43 @@
 import { ref } from 'vue'
 
 export const usePokemon = () => {
-  const pokemon = ref([])
+  const pokemon = ref<Array<any>>([])
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<Error | null>(null)
+  const offset = ref(0)
+  const limit = 20
+  const hasMore = ref(true)
 
-  const fetchPokemon = async (limit = 20, offset = 0) => {
+  const fetchPokemon = async (loadMore = false) => {
+    if (loading.value) return
+    
     loading.value = true
     error.value = null
+    
     try {
-      const data = await $fetch('https://pokeapi.co/api/v2/pokemon', {
-        query: { limit, offset }
+      const data = await $fetch<{ results: Array<{ url: string }>, count: number }>('https://pokeapi.co/api/v2/pokemon', {
+        query: { limit, offset: offset.value }
       })
       
-      // Detailinformationen für jedes Pokémon laden
       const detailedPokemon = await Promise.all(
         data.results.map(p => $fetch(p.url))
       )
       
-      pokemon.value = detailedPokemon
+      if (loadMore) {
+        pokemon.value = [...pokemon.value, ...detailedPokemon]
+      } else {
+        pokemon.value = detailedPokemon
+      }
+      
+      offset.value += limit
+      hasMore.value = offset.value < data.count
     } catch (err) {
-      error.value = err
+      error.value = err instanceof Error ? err : new Error(String(err))
       console.error('Pokemon Fehler:', err)
     } finally {
       loading.value = false
     }
   }
 
-  return { pokemon, loading, error, fetchPokemon }
+  return { pokemon, loading, error, fetchPokemon, hasMore }
 }
