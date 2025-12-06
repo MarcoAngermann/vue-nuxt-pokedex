@@ -23,6 +23,7 @@
           v-for="p in displayedPokemon" 
           :key="p.id"
           :pokemon="p"
+          @openCard="selectedPokemon = $event"
         />
       </div>
       
@@ -40,9 +41,19 @@
       </div>
     </div>
   </div>
+
+  <!-- Big Card Modal -->
+  <PokemonBigCard 
+    v-if="selectedPokemon"
+    :pokemon="selectedPokemon"
+    :isOpen="!!selectedPokemon"
+    @close="selectedPokemon = null"
+  />
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted, nextTick, onBeforeUnmount, watch } from 'vue'
+
 interface Pokemon {
   name: string
   id: number
@@ -52,6 +63,7 @@ interface Pokemon {
 const { pokemon, loading, error, fetchPokemon, hasMore, searchQuery, loadAllPokemonNames, isSearching, allPokemon } = usePokemon()
 const sentinel = ref<HTMLElement | null>(null)
 const searchResults = ref<Pokemon[]>([])
+const selectedPokemon = ref<Pokemon | null>(null)
 
 const displayedPokemon = computed(() => {
   return searchQuery.value && searchQuery.value.length >= 3 ? searchResults.value : pokemon.value

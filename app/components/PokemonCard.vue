@@ -2,6 +2,7 @@
   <div 
     class="bg-gray-800 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer overflow-hidden border-2"
     :class="borderColor"
+    @click="openBigCard"
   >
     <div 
       class="h-2"
@@ -65,6 +66,10 @@ const props = defineProps<{
   pokemon: any
 }>()
 
+const emit = defineEmits<{
+  openCard: [pokemon: any]
+}>()
+
 const primaryType = props.pokemon.types[0].type.name as TypeKey
 
 const headerGradient = computed(() => {
@@ -121,5 +126,9 @@ const borderColor = computed(() => {
 
 const getTypeColor = (type: string) => {
   return typeColors[type as TypeKey] || 'bg-gray-400'
+}
+
+const openBigCard = () => {
+  emit('openCard', props.pokemon)
 }
 </script>
